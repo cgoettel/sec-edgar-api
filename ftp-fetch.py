@@ -3,9 +3,18 @@
 from ftplib import FTP
 import re
 import os
+import errno
 
 def handleDownload(block):
     local_file_handle.write(block)
+
+def mkdir_p(path):
+    try:
+        os.makedirs(path)
+    except OSError as exc: # Python >2.5
+        if exc.errno == errno.EEXIST and os.path.isdir(path):
+            pass
+        else: raise
 
 user = 'anonymous'
 # Uses your e-mail address as the password.
@@ -55,11 +64,12 @@ with open('master', 'r') as master_list:
         date_filed   = fields[3]
         ftp_file     = '/' + fields[4]
         ftp_file = ftp_file.rstrip()
+        directory = '10-K/' + CIK
         
         if form_type != '10-K':
             continue
         
-        os.makedirs('10-K/' + CIK)
+        mkdir_p(directory)
         
         # Replace the '/' in the filename with a dash.
         local_file = re.sub(r'.*/', '', ftp_file)
