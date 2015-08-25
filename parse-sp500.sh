@@ -5,6 +5,7 @@ cat SP500_Constituents_1993-2014.txt | awk '
 BEGIN {
     FIELDWIDTHS = "10 8 13 62 13 11 61 12 10"
     print "USE SP500;"
+    # print "CREATE TABLE data ( gvkeyx VARCHAR(6), from_date VARCHAR(8), thru_date VARCHAR(8), conm VARCHAR(50), tic VARCHAR(10), gvkey VARCHAR(10), co_conm VARCHAR(62), co_tic VARCHAR(10), co_cik VARCHAR(15));"
 } {
     gvkeyx    = $1
     from_date = $2
@@ -34,7 +35,8 @@ BEGIN {
     sub(/^ */, "", co_tic)
     sub(/ *$/, "", co_tic)
     sub(/^ */, "", co_cik)
+    sub(/^0*/, "", co_cik)
     sub(/ *$/, "", co_cik)
     
-    print "INSERT INTO data VALUES (\"" gvkeyx "\", \"" from_date "\", \"" thru_date "\", \"" conm "\", \"" tic "\", \"" gvkey "\", \"" co_conm "\", \"" co_tic "\", \"" co_cik "\");"
-}'
+    print "INSERT INTO sp500 VALUES (\"" gvkeyx "\", \"" from_date "\", \"" thru_date "\", \"" conm "\", \"" tic "\", \"" gvkey "\", \"" co_conm "\", \"" co_tic "\", \"" co_cik "\");"
+}' | mysql -u root -p
