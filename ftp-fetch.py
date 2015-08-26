@@ -25,26 +25,16 @@ ftp.login(user, password)
 
 # Master format is: CIK|Company Name|Form Type|Date Filed|Filename
 # Master file found at ftp://ftp.sec.gov/edgar/full-index/master.Z
-with open('master', 'r') as master_list:
+with open('cik-master.10k', 'r') as master_list:
     for line in master_list:
         fields = line.split('|')
         
-        CIK          = fields[0]
-        company_name = fields[1]
-        form_type    = fields[2]
-        date_filed   = fields[3]
-        ftp_file     = '/' + fields[4]
+        CIK      = fields[0]
+        date     = fields[1]
+        ftp_file = fields[2]
         ftp_file = ftp_file.rstrip()
-        directory = '10-K/' + CIK
         
-        if form_type != '10-K':
-            continue
-        
-        mkdir_p(directory)
-        
-        # Replace the '/' in the filename with a dash.
-        local_file = re.sub(r'.*/', '', ftp_file)
-        local_file = '10-K/' + CIK + '/' + local_file
+        local_file = '10-K/10-K_' + CIK + "_" + date + ".html"
         
         # Open the file for writing in binary mode
         print 'Opening local file ' + local_file
