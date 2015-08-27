@@ -52,3 +52,4 @@ with open('cik-master.10k', 'r') as master_list:
         local_file_handle.close()
 
 ftp.quit()
+ (1) file name, (2) company name, (3) date of the filing, and (4) file size?
