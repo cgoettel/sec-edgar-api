@@ -20,7 +20,9 @@ while ( <INPUT> )
     }
     
     my $current_line = $_;
-    $current_line =~ s/<.*?>//g;
+    $current_line =~ s/<.*?>/\n/g;
+    $current_line =~ s/&#160;/ /g;
+    $current_line =~ s/&#252;//g;
     print OUTPUT $current_line;
 }
 
