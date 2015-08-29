@@ -2,29 +2,35 @@
 
 use strict;
 use warnings;
+use HTML::Strip;
 
-my $flag = 1;
+my @input_directory  = </media/colby/MyPassport/sec-edgar-data/10-K/*>;
+my $output_directory = "/media/colby/MyPassport/sec-edgar-data/10-K-sanitized";
 
-open(INPUT, "<10-K/10-K_65984_2015-02-26.html") or die "Failed to open INPUT: $!";
-open(OUTPUT, ">10-K/test.txt") or die "Failed to open OUTPUT: $!";
+my $total_file_count   = 12673;
+my $current_file_count = 0;
 
-while ( <INPUT> )
+foreach my $current_file ( @input_directory )
 {
-    if ( $_ !~ /<html>/ and $flag )
+    open( my $INPUT, "<$current_file" ) or die "Failed to open INPUT: $!";
+    my $output_file = $current_file;
+    $output_file =~ s/.*\///;
+    open( my $OUTPUT, ">$output_directory/$output_file" ) or die "Failed to open OUTPUT: $!";
+    
+    my $hs = HTML::Strip->new();
+    
+    while ( <$INPUT> )
     {
-        next;
-    }
-    else
-    {
-        $flag = 0;
+        my $current_line = $_;
+        my $clean_text = $hs->parse( $current_line );
+        print $OUTPUT $clean_text;
     }
     
-    my $current_line = $_;
-    $current_line =~ s/<.*?>/\n/g;
-    $current_line =~ s/&#160;/ /g;
-    $current_line =~ s/&#252;//g;
-    print OUTPUT $current_line;
+    $hs->eof;
+    
+    close $INPUT;
+    close $OUTPUT;
+    
+    $current_file_count++;
+    print "Current file: " . $current_file_count . "/$total_file_count\n" if ( $current_file_count % 100 == 0 );
 }
-
-close INPUT;
-close OUTPUT;
