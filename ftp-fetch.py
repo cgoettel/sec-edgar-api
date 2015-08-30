@@ -23,8 +23,6 @@ password = 'colby.goettel@gmail.com'
 ftp = FTP('ftp.sec.gov')
 ftp.login(user, password)
 
-# Master format is: CIK|Company Name|Form Type|Date Filed|Filename
-# Master file found at ftp://ftp.sec.gov/edgar/full-index/master.Z
 with open('cik-master.10k', 'r') as master_list:
     for line in master_list:
         fields = line.split('|')
@@ -52,4 +50,3 @@ with open('cik-master.10k', 'r') as master_list:
         local_file_handle.close()
 
 ftp.quit()
- (1) file name, (2) company name, (3) date of the filing, and (4) file size?

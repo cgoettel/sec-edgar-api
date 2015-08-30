@@ -8,3 +8,7 @@ The end goal was to grab every 10-K filing for an S&P500 company. To do this, we
 - Next, took a master list of S&P500 companies and threw those into another SQL table.
 - Selected all similar results with this command: `SELECT cik,date,filename FROM master WHERE cik IN (SELECT co_cik FROM sp500) INTO OUTFILE 'cik-master.10k' FIELDS TERMINATED BY '|';`.
 - Ran through `cik-master.10k` and FTP'd all of the 10-K filings. NOTE: this is a huge amount of data. Close to 70GB so make sure you have enough disk space to grab it. Also, it takes about 22 hours to download. Because I knew it wouldn't be too long, I figured it was faster to just download the files than figure out how to multithread an FTP download in Python.
+
+Next major step was to sanitize the 10-K files by removing all HTML tags. `delete-tags.pl` does this by using the CPAN module `HTML::Strip`. Took 66 minutes to strip the tags from all 12,673 files and brought the file size down from 102GB to 29GB. Incredible.
+
+The last step is to search through the 10-K files and check the frequency of words in `dictionary.txt`. The Perl script `count-words.pl` does this by splitting each line by whitespace and running through each of those words, checking them against a dictionary, and tracking their frequency.
