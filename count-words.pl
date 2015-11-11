@@ -3,6 +3,7 @@
 use strict;
 use warnings;
 
+my $DEBUG = 1;
 # Whenever printing this hash, always sort by key so the order remains the same throughout iterations.
 my %dictionary = ( 
                   "arts"            => 0,
@@ -70,7 +71,7 @@ my %dictionary = (
                   "wealth"          => 0,
 );
 
-my @input_directory  = </media/colby/MyPassport/sec-edgar-data/10-K-test/*>;
+my @input_directory  = </media/colby/032c3e65-751b-49fd-a5a0-e6ba3c9b26d3/10-K-sanitized/*>;
 
 my $total_file_count   = 12673;
 my $current_file_count = 0;
